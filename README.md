@@ -11,5 +11,3 @@ See JavaEngineer_TestTask.pdf for details.
 Execute from the search-engine-server folder
 
 `./mvnw spring-boot:run`
-
-
