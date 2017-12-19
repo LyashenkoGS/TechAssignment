@@ -6,9 +6,10 @@ See JavaEngineer_TestTask.pdf for details.
 
 * JDK 1.8
 
-### How to run
+### How to run server
 
-//TODO
+Execute from the search-engine-server folder
 
+`./mvnw spring-boot:run`
 
 
