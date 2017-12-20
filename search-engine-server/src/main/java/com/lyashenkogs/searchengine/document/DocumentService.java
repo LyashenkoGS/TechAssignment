@@ -16,7 +16,7 @@ public class DocumentService {
     private Jedis documents;
 
     @Autowired
-    @Qualifier("documents")
+    @Qualifier("invertedIndex")
     private Jedis invertedIndex;
 
     public void add(Document document) {

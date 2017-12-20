@@ -57,7 +57,7 @@ public class SearchEngineSystemTest {
                 .content(documentJSON))
                 .andExpect(status().isCreated());
         //Then retrieve the one by a key
-        mockMvc.perform(get("/document?key=someKey")
+        mockMvc.perform(get("/document/someKey")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().json(documentJSON));
