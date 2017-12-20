@@ -6,8 +6,15 @@ See JavaEngineer_TestTask.pdf for details.
 
 * JDK 1.8
 
-### How to run server
+### How to run
+1. Run a server with embedded Redis
 
 Execute from the search-engine-server folder
+
+`./mvnw spring-boot:run`
+
+2. Run a client and connect to the server
+
+Execute from the search-engine-client folder
 
 `./mvnw spring-boot:run`
