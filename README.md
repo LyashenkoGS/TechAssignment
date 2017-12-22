@@ -1,2 +1,2 @@
 # TechAssignment
-A technical assignment to implement a simplest search engine.
+Here may be some technical assignment to write an algorithm
