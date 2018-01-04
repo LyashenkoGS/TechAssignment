@@ -139,6 +139,36 @@ public class AdjMatrixGraph {
         return s.toString();
     }
 
+    /**
+     * /**
+     * Example: <br>
+     * strict graph G {<br>
+     * 0 -- 1;          <br>
+     * 0 -- 2;          <br>
+     * 1 -- 0;          <br>
+     * 1 -- 2;          <br>
+     * 2 -- 0;          <br>
+     * 2 -- 1;          <br>
+     * }                <br>
+     *
+     * @return representation of the graph in graphviz dot language.
+     */
+    public String graphvizRepresentaion() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("strict graph G {\n");
+        for (int i = 0; i < adjacencyMatrix.length; i++) {
+            boolean[] arr = adjacencyMatrix[i];
+            for (int j = 0; j < arr.length; j++) {
+                if (arr[j]) {
+                    sb.append(i + " -- " + j + ";\n");
+                }
+
+            }
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
     // support iteration over graph vertices
     private class AdjIterator implements Iterator<Integer>, Iterable<Integer> {
         private int v;
