@@ -1,30 +1,29 @@
 package com.lyashenkogs;
 
 import edu.princeton.cs.introcs.In;
-import edu.princeton.cs.introcs.StdOut;
 
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
 /**
- *  The {@code Digraph} class represents a directed graph of vertices
- *  named 0 through <em>V</em> - 1.
- *  It supports the following two primary operations: add an edge to the digraph,
- *  iterate over all of the vertices adjacent from a given vertex.
- *  Parallel edges and self-loops are permitted.
- *  <p>
- *  This implementation uses an adjacency-lists representation, which
- *  is a vertex-indexed array of {@link Bag} objects.
- *  All operations take constant time (in the worst case) except
- *  iterating over the vertices adjacent from a given vertex, which takes
- *  time proportional to the number of such vertices.
- *  <p>
- *  For additional documentation,
- *  see <a href="https://algs4.cs.princeton.edu/42digraph">Section 4.2</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
+ * The {@code Digraph} class represents a directed graph of vertices
+ * named 0 through <em>V</em> - 1.
+ * It supports the following two primary operations: add an edge to the digraph,
+ * iterate over all of the vertices adjacent from a given vertex.
+ * Parallel edges and self-loops are permitted.
+ * <p>
+ * This implementation uses an adjacency-lists representation, which
+ * is a vertex-indexed array of {@link Bag} objects.
+ * All operations take constant time (in the worst case) except
+ * iterating over the vertices adjacent from a given vertex, which takes
+ * time proportional to the number of such vertices.
+ * <p>
+ * For additional documentation,
+ * see <a href="https://algs4.cs.princeton.edu/42digraph">Section 4.2</a> of
+ * <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
+ * @author Robert Sedgewick
+ * @author Kevin Wayne
  */
 
 public class AdjListDigraph {
@@ -38,7 +37,7 @@ public class AdjListDigraph {
     /**
      * Initializes an empty digraph with <em>V</em> vertices.
      *
-     * @param  V the number of vertices
+     * @param V the number of vertices
      * @throws IllegalArgumentException if {@code V < 0}
      */
     public AdjListDigraph(int V) {
@@ -58,7 +57,7 @@ public class AdjListDigraph {
      * followed by the number of edges <em>E</em>,
      * followed by <em>E</em> pairs of vertices, with each entry separated by whitespace.
      *
-     * @param  in the input stream
+     * @param in the input stream
      * @throws IllegalArgumentException if the endpoints of any edge are not in prescribed range
      * @throws IllegalArgumentException if the number of vertices or edges is negative
      * @throws IllegalArgumentException if the input stream is in the wrong format
@@ -79,8 +78,7 @@ public class AdjListDigraph {
                 int w = in.readInt();
                 addEdge(v, w);
             }
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             throw new IllegalArgumentException("invalid input format in Digraph constructor", e);
         }
     }
@@ -88,7 +86,7 @@ public class AdjListDigraph {
     /**
      * Initializes a new digraph that is a deep copy of the specified digraph.
      *
-     * @param  G the digraph to copy
+     * @param G the digraph to copy
      */
     public AdjListDigraph(AdjListDigraph G) {
         this(G.V());
@@ -106,6 +104,7 @@ public class AdjListDigraph {
             }
         }
     }
+
 
     /**
      * Returns the number of vertices in this digraph.
@@ -125,18 +124,17 @@ public class AdjListDigraph {
         return E;
     }
 
-
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
     private void validateVertex(int v) {
         if (v < 0 || v >= V)
-            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
+            throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
     }
 
     /**
      * Adds the directed edge v→w to this digraph.
      *
-     * @param  v the tail vertex
-     * @param  w the head vertex
+     * @param v the tail vertex
+     * @param w the head vertex
      * @throws IllegalArgumentException unless both {@code 0 <= v < V} and {@code 0 <= w < V}
      */
     public void addEdge(int v, int w) {
@@ -150,7 +148,7 @@ public class AdjListDigraph {
     /**
      * Returns the vertices adjacent from vertex {@code v} in this digraph.
      *
-     * @param  v the vertex
+     * @param v the vertex
      * @return the vertices adjacent from vertex {@code v} in this digraph, as an iterable
      * @throws IllegalArgumentException unless {@code 0 <= v < V}
      */
@@ -163,7 +161,7 @@ public class AdjListDigraph {
      * Returns the number of directed edges incident from vertex {@code v}.
      * This is known as the <em>outdegree</em> of vertex {@code v}.
      *
-     * @param  v the vertex
+     * @param v the vertex
      * @return the outdegree of vertex {@code v}
      * @throws IllegalArgumentException unless {@code 0 <= v < V}
      */
@@ -176,7 +174,7 @@ public class AdjListDigraph {
      * Returns the number of directed edges incident to vertex {@code v}.
      * This is known as the <em>indegree</em> of vertex {@code v}.
      *
-     * @param  v the vertex
+     * @param v the vertex
      * @return the indegree of vertex {@code v}
      * @throws IllegalArgumentException unless {@code 0 <= v < V}
      */
@@ -204,7 +202,7 @@ public class AdjListDigraph {
      * Returns a string representation of the graph.
      *
      * @return the number of vertices <em>V</em>, followed by the number of edges <em>E</em>,
-     *         followed by the <em>V</em> adjacency lists
+     * followed by the <em>V</em> adjacency lists
      */
     public String toString() {
         StringBuilder s = new StringBuilder();
@@ -219,15 +217,17 @@ public class AdjListDigraph {
         return s.toString();
     }
 
-    /**
-     * Unit tests the {@code Digraph} data type.
-     *
-     * @param args the command-line arguments
-     */
-    public static void main(String[] args) {
-        In in = new In(args[0]);
-        AdjListDigraph G = new AdjListDigraph(in);
-        StdOut.println(G);
+    public String toGraphviz() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("digraph {\n");
+        for (int i = 0; i < this.V(); i++) {
+            Iterable<Integer> adj = this.adj(i);
+            for (Integer integer : adj) {
+                sb.append(i + "->" + integer + ";\n");
+            }
+        }
+        sb.append("}");
+        return sb.toString();
     }
 
 }

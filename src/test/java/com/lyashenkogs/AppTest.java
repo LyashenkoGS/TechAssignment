@@ -53,4 +53,44 @@ public class AppTest {
         App.drawWindow(new File("example/ex1.png"));
         Thread.sleep(2_000);
     }
+
+
+    @Test
+    public void directedGraph() {
+        AdjListDigraph G = new AdjListDigraph(13);
+        G.addEdge(2, 3);
+        G.addEdge(0, 6);
+        G.addEdge(0, 1);
+        G.addEdge(2, 0);
+        G.addEdge(11, 12);
+        G.addEdge(9, 12);
+        G.addEdge(9, 10);
+        G.addEdge(9, 11);
+        G.addEdge(3, 5);
+        G.addEdge(8, 7);
+        G.addEdge(5, 4);
+        G.addEdge(0, 5);
+        G.addEdge(6, 4);
+        G.addEdge(6, 9);
+        G.addEdge(7, 6);
+        assertEquals("digraph {\n" +
+                "0->5;\n" +
+                "0->1;\n" +
+                "0->6;\n" +
+                "2->0;\n" +
+                "2->3;\n" +
+                "3->5;\n" +
+                "5->4;\n" +
+                "6->9;\n" +
+                "6->4;\n" +
+                "7->6;\n" +
+                "8->7;\n" +
+                "9->11;\n" +
+                "9->10;\n" +
+                "9->12;\n" +
+                "11->12;\n" +
+                "}", G.toGraphviz());
+    }
+
+
 }
