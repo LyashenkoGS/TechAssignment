@@ -1,20 +1,16 @@
-# TechAssignment
-A technical assignment to implement a simplest search engine with a client.
-See JavaEngineer_TestTask.pdf for details.
+# TCP server_client architecture
 
-### Prerequisites
+## Prerequisites 
 
-* JDK 1.8
+* gcc
 
-### How to run
-1. Run a server with embedded Redis
+## How to build and run
 
-Execute from the search-engine-server folder
+* to compile
+ './compile '
+ 
+* to run
 
-`./mvnw spring-boot:run`
-
-2. Run a client and connect to the server
-
-Execute from the search-engine-client folder
-
-`./mvnw spring-boot:run`
+ './tcp_server_bin 8080'
+ './tcp_client_bin localhost 8080'
+  

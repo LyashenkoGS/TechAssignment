@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="algorithms" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="algorithms" target="1.8" />
+      <module name="search-engine" target="1.8" />
+      <module name="search-engine-client" target="1.8" />
+      <module name="search-engine-server" target="1.8" />
+      <module name="TechAssignment" target="1.6" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
