@@ -1,3 +1,0 @@
-/home/m/CLionProjects/tcp_sockets_example/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/m/CLionProjects/tcp_sockets_example/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/m/CLionProjects/tcp_sockets_example/cmake-build-debug/CMakeFiles/hello_world.dir

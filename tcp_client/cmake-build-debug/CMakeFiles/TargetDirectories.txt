@@ -1,3 +1,0 @@
-/home/m/CLionProjects/TcpServer/untitled/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/m/CLionProjects/TcpServer/untitled/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/m/CLionProjects/TcpServer/untitled/cmake-build-debug/CMakeFiles/untitled.dir
