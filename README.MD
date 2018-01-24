@@ -7,12 +7,14 @@ Create console application “Airline”:
 5. Find aircraft corresponding to the specified range of fuel consumption parameters (liters per hour).
 
 6. Console menu should contain following commands at bare minimum:
-• Calculate the total capacity and carrying capacity of all the aircraft in the airline.
-• Display the list of aircraft of the company sorted by flight range.
-• Find airplanes corresponding to a given range of fuel consumption parameters.
+
+* Calculate the total capacity and carrying capacity of all the aircraft in the airline.
+* Display the list of aircraft of the company sorted by flight range.
+* Find airplanes corresponding to a given range of fuel consumption parameters.
 
 Application must meet the requirements:
-1.Stick to java code convention.
+
+1. Stick to java code convention.
 2. Use OOP : classes, inheritance, polymorphism, encapsulation, interfaces, etc.
 3. Each class must have a meaningful name and reasonable composition.
 4. Inheritance should only be applied when it makes sense.
@@ -29,15 +31,14 @@ Requirements for task design:
 7. Opensource libraries and frameworks are allowed.
 
 Evaluation criteria:
-• functional correctness according to the technical requirements,
-• application usability,
-• readability, maintainability and compliance of the code with OOP and SOLID principles,
-• documentation for the application and  the code,
-• unit tests availability,
-• any non-standard technical solutions,
-• any additional features not specified in the technical requirements, but making the application more functional or convenient,
-
-• task execution time.
+* functional correctness according to the technical requirements,
+* application usability,
+* readability, maintainability and compliance of the code with OOP and SOLID principles,
+* documentation for the application and  the code,
+* unit tests availability,
+* any non-standard technical solutions,
+* any additional features not specified in the technical requirements, but making the application more functional or convenient,
+* task execution time.
 
 Tasks that do not meet the requirements will not be considered.
 
