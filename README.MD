@@ -1,4 +1,16 @@
 # TechAssignment
+
+### Prerequisites
+
+* JDK 1.8
+* Apache maven 3.5
+
+### How to build and run
+
+`mvn clean install`
+
+`java -jar target/aircraft-console-app-*-jar-with-dependencies.jar`
+
 Create console application “Airline”:
 1. Define aircraft class hierarchy. There should be 3 levels of the hierarchy.
 2. Create an airline company that stores airplanes.
@@ -42,13 +54,4 @@ Evaluation criteria:
 
 Tasks that do not meet the requirements will not be considered.
 
-### Prerequisites
-
-* JDK 1.8
-
-### How to build and run
-
-`./mvnw clean install`
-
-`java -jar target/aircraft-console-app-*-jar-with-dependencies.jar`
 

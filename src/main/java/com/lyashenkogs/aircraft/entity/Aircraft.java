@@ -1,4 +1,4 @@
-package com.lyashenkogs.aircraft;
+package com.lyashenkogs.aircraft.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

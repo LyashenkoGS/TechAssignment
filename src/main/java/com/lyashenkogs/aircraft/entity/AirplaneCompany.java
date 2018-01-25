@@ -1,4 +1,4 @@
-package com.lyashenkogs.aircraft;
+package com.lyashenkogs.aircraft.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,7 +14,7 @@ public class AirplaneCompany implements Serializable {
         if (o1.getFlyRange().compareTo(o2.getFlyRange()) == 0) {
             return Long.compare(o1.getId(), o2.getId());
         } else {
-            return (o1.getFuelConsumptionPerHour().compareTo(o2.getFuelConsumptionPerHour()));
+            return (o1.getFlyRange().compareTo(o2.getFlyRange()));
         }
     });
 
@@ -83,7 +83,11 @@ public class AirplaneCompany implements Serializable {
     }
 
     public void add(Aircraft aircraft) {
-        this.aircrafts.add(aircraft);
+        if (this.getAircrafts().contains(aircraft)) {
+            System.out.println("already contain an aircraft!");
+        } else {
+            this.aircrafts.add(aircraft);
+        }
     }
 
 }

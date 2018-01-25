@@ -1,5 +1,7 @@
 package com.lyashenkogs.aircraft;
 
+import com.lyashenkogs.aircraft.entity.Aircraft;
+import com.lyashenkogs.aircraft.entity.AirplaneCompany;
 import org.junit.Assert;
 import org.junit.Test;
 
