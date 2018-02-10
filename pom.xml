@@ -17,11 +17,6 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
-        <dependency>
-            <groupId>com.massisframework</groupId>
-            <artifactId>j-text-utils</artifactId>
-            <version>0.3.4</version>
-        </dependency>
 
     </dependencies>
     <properties>
@@ -44,7 +39,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        com.lyashenkogs.aircraft.App
+                                        com.lyashenkogs.tic.App
                                     </mainClass>
                                 </manifest>
                             </archive>
