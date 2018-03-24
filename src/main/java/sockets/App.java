@@ -19,6 +19,18 @@ public class App {
         server.createContext("/test", new MyHandler());
         server.setExecutor(null); // creates a default executor
         server.start();
+
+
+        /*
+        TODO tasks to solve:
+        1. open a tcp socket
+        2. accept a request and read it as an array of bytes
+        3. parse http headers to UTF-8 string
+        4. generate http headers to response
+        5. send an array of bytes as a response
+
+         */
+
     }
 
     static class MyHandler implements HttpHandler {
