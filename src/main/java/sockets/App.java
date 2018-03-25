@@ -1,42 +1,59 @@
 package sockets;
 
-import fi.iki.elonen.NanoHTTPD;
-
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-public class App extends NanoHTTPD {
+public class App {
 
-    public App() throws IOException {
-        super(8080);
-        start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
-        System.out.println("\nRunning! Point your browsers to http://localhost:8080/ \n");
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        //parse request URI using a raw socket
+        new Thread(() -> {
+            ServerSocket serverSocket = null;
+            try {
+                serverSocket = new ServerSocket(8080);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Socket accept = null;
+            try {
+                accept = serverSocket.accept();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedReader bufferedReader = null;
+            try {
+                bufferedReader = new BufferedReader(new InputStreamReader(accept.getInputStream()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            while (true) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                String line = null;
+                try {
+                    line = bufferedReader.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                while (line != null) {
+                    System.out.println(line);
+                    try {
+                        line = bufferedReader.readLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
     }
 
-    public static void main(String[] args) {
-        try {
-            new App();
-        } catch (IOException ioe) {
-            System.err.println("Couldn't start server:\n" + ioe);
-        }
-    }
-
-    @Override
-    public Response serve(IHTTPSession session) {
-        String fileName = session.getUri().replace("/", "");
-        byte[] bytes = new byte[0];
-        try {
-            bytes = Files.readAllBytes(Paths.get(fileName));
-        } catch (NoSuchFileException e) {
-            System.out.println("cant handle URI:" + session.getUri());
-            return newFixedLengthResponse("unexpected URI: " + session.getUri());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return newFixedLengthResponse(new String(bytes, Charset.defaultCharset()));
-    }
 }
 

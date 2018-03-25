@@ -55,10 +55,8 @@ public class AppTest {
         //so we will get a request as a byte array
         InputStream inputStream = accept[0].getInputStream();
         byte[] response = readBytes(inputStream);
-
         System.out.println(Arrays.toString(response));
     }
-
 
     @Test
     public void getSomeFile() throws Exception {
@@ -70,7 +68,7 @@ public class AppTest {
         InputStream inputStream = yc.getInputStream();
         byte[] response = readBytes(inputStream);
         System.out.println("actual:\n" + new String(response));
-        //so we will get a file in a response
+        //so we will get a file in the response
         byte[] someHTML1Bytes = Files.readAllBytes(Paths.get("someFile.html"));
         System.out.println("expected:\n" + new String(someHTML1Bytes, Charset.defaultCharset()));
         assertArrayEquals(someHTML1Bytes, response);
@@ -86,12 +84,11 @@ public class AppTest {
         InputStream inputStream = yc.getInputStream();
         byte[] response = readBytes(inputStream);
         System.out.println("actual:\n" + new String(response));
-        //so we will get a file in a response
+        //so we will get a file in the response
         byte[] someHTML1Bytes = Files.readAllBytes(Paths.get("someFile2.html"));
         System.out.println("expected:\n" + new String(someHTML1Bytes, Charset.defaultCharset()));
         assertArrayEquals(someHTML1Bytes, response);
     }
-
 
     @Test
     public void getUnexistedFile() throws Exception {
