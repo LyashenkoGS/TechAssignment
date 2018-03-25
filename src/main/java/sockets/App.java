@@ -1,48 +1,42 @@
 package sockets;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
+import fi.iki.elonen.NanoHTTPD;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 
-/**
- * HTTP server from JDK example
- */
-public class App {
-    public static void main(String[] args) throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-        server.createContext("/test", new MyHandler());
-        server.setExecutor(null); // creates a default executor
-        server.start();
+public class App extends NanoHTTPD {
 
-
-        /*
-        TODO tasks to solve:
-        1. open a tcp socket
-        2. accept a request and read it as an array of bytes
-        3. parse http headers to UTF-8 string
-        4. generate http headers to response
-        5. send an array of bytes as a response
-
-         */
-
+    public App() throws IOException {
+        super(8080);
+        start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
+        System.out.println("\nRunning! Point your browsers to http://localhost:8080/ \n");
     }
 
-    static class MyHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange t) throws IOException {
-            File file = new File("someHTML1.html");
-            byte[] bytes = Files.readAllBytes(file.toPath());
-            t.sendResponseHeaders(200, bytes.length);
-            OutputStream os = t.getResponseBody();
-            os.write(bytes);
-            os.close();
+    public static void main(String[] args) {
+        try {
+            new App();
+        } catch (IOException ioe) {
+            System.err.println("Couldn't start server:\n" + ioe);
         }
     }
 
+    @Override
+    public Response serve(IHTTPSession session) {
+        String fileName = session.getUri().replace("/", "");
+        byte[] bytes = new byte[0];
+        try {
+            bytes = Files.readAllBytes(Paths.get(fileName));
+        } catch (NoSuchFileException e) {
+            System.out.println("cant handle URI:" + session.getUri());
+            return newFixedLengthResponse("unexpected URI: " + session.getUri());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return newFixedLengthResponse(new String(bytes, Charset.defaultCharset()));
+    }
 }
+
