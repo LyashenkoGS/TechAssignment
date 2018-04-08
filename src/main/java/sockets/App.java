@@ -13,13 +13,14 @@ import java.nio.file.Paths;
 public class App {
 
     private static final String DELIMITER = "\r\n";
-    public static boolean isReady = false;
 
-    public static void main(String[] args) {
+    private static boolean isReady = false;
+
+    public static void main(String[] args) throws InterruptedException {
         //process incoming HTTP request in a new thread
         Thread mainThread = new Thread(() -> {
-            String line = null;
-            BufferedReader bufferedReader = null;
+            String line;
+            BufferedReader bufferedReader;
             Socket accept = null;
             String fileName = "";
             ServerSocket serverSocket = null;
@@ -27,25 +28,36 @@ public class App {
                 serverSocket = new ServerSocket(8080);
                 serverSocket.setReuseAddress(true);
                 isReady = true;
-                accept = serverSocket.accept();
                 System.out.println("START CUSTOM SERVER");
-                bufferedReader = new BufferedReader(new InputStreamReader(accept.getInputStream()));
-                line = bufferedReader.readLine();
-                //parse URI
-                String[] tokens = line.split(" ");
-                fileName = tokens[1].replace("/", "");
-            } catch (Exception e) {
+                accept = serverSocket.accept();
+                System.out.println("Accept incoming request");
+            } catch (IOException e) {
                 e.printStackTrace();
-            }
-            while (line != null && !line.equals("")) {
-                System.out.println(line);
                 try {
-                    line = bufferedReader.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    if (accept != null) {
+                        accept.close();
+                    }
+                    if (serverSocket != null) {
+                        serverSocket.close();
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
-            //send response
+            //parse URI
+            try {
+                bufferedReader = new BufferedReader(new InputStreamReader(accept.getInputStream()));
+                line = bufferedReader.readLine();
+                String[] tokens = line.split(" ");
+                fileName = tokens[1].replace("/", "");
+                while (line != null && !line.equals("")) {
+                    System.out.println(line);
+                    line = bufferedReader.readLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //read and return a static file
             try {
                 File file = new File(fileName);
                 byte[] responseBody;
@@ -66,16 +78,22 @@ public class App {
                 e.printStackTrace();
             }
             try {
-                serverSocket.close();
+                if (serverSocket != null) {
+                    serverSocket.close();
+                }
                 accept.close();
                 System.out.println("CUSTOM SERVER:SOCKET IS CLOSED");
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
             isReady = false;
         });
         mainThread.start();
+        while (!isReady) {
+            System.out.println("awaiting the server start");
+            Thread.sleep(500);
+        }
+        System.out.println();
     }
 
     static class NanoHTTTPDexample extends NanoHTTPD {

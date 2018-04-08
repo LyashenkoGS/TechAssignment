@@ -80,10 +80,6 @@ public class AppTest {
     public void getSomeFile() throws Exception {
         //given a web server
         App.main(new String[]{});
-        while (!App.isReady) {
-            System.out.println("awaiting when the server is ready");
-            Thread.sleep(500);
-        }
         //then sent an http request
         URL yahoo = new URL("http://127.0.0.1:8080/" + FILE1);
         URLConnection yc = yahoo.openConnection();
@@ -101,10 +97,6 @@ public class AppTest {
     public void getSomeFile2() throws Exception {
         //given a web server
         App.main(new String[]{});
-        while (!App.isReady) {
-            System.out.println("awaiting when the server is ready");
-            Thread.sleep(500);
-        }
         //then sent an http request
         URL yahoo = new URL("http://127.0.0.1:8080/" + FILE2);
         URLConnection yc = yahoo.openConnection();
@@ -121,10 +113,6 @@ public class AppTest {
     public void getUnexistedFile() throws Exception {
         //given a web server
         App.main(new String[]{});
-        while (!App.isReady) {
-            System.out.println("awaiting when the server is ready");
-            Thread.sleep(500);
-        }
         //then sent an http request to a wrong URI
         URL yahoo = new URL("http://127.0.0.1:8080/aaaaa.html");
         URLConnection yc = yahoo.openConnection();
