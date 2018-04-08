@@ -15,12 +15,23 @@ public class App {
     private static final String DELIMITER = "\r\n";
 
     private static boolean isReady = false;
+    private static volatile boolean running = true;
+
+
+    public static void stop() throws InterruptedException {
+        App.running = false;
+        while (!isReady) {
+            Thread.sleep(100);
+            System.out.println("awaiting until the server shutdown");
+        }
+    }
 
     public static void main(String[] args) throws InterruptedException {
         //process incoming HTTP request in a new thread
         Thread mainThread = new Thread(() -> {
+            running = true;
             String line;
-            BufferedReader bufferedReader;
+            BufferedReader bufferedReader = null;
             Socket accept = null;
             String fileName = "";
             ServerSocket serverSocket = null;
@@ -31,6 +42,7 @@ public class App {
                 System.out.println("START CUSTOM SERVER");
                 accept = serverSocket.accept();
                 System.out.println("Accept incoming request");
+                bufferedReader = new BufferedReader(new InputStreamReader(accept.getInputStream()));
             } catch (IOException e) {
                 e.printStackTrace();
                 try {
@@ -44,39 +56,39 @@ public class App {
                     ex.printStackTrace();
                 }
             }
-            //parse URI
-            try {
-                bufferedReader = new BufferedReader(new InputStreamReader(accept.getInputStream()));
-                line = bufferedReader.readLine();
-                String[] tokens = line.split(" ");
-                fileName = tokens[1].replace("/", "");
-                while (line != null && !line.equals("")) {
-                    System.out.println(line);
-                    line = bufferedReader.readLine();
+            while (running) {
+                //parse URI
+                try {
+                    if (bufferedReader.ready()) {
+                        line = bufferedReader.readLine();
+                        String[] tokens = line.split(" ");
+                        fileName = tokens[1].replace("/", "");
+                        while (line != null && !line.equals("")) {
+                            System.out.println(line);
+                            line = bufferedReader.readLine();
+                        }
+                        //read and return a static file
+                        File file = new File(fileName);
+                        byte[] responseBody;
+                        if (file.canRead()) {
+                            responseBody = Files.readAllBytes(file.toPath());
+                        } else {
+                            responseBody = ("can't read the file by name: " + fileName).getBytes();
+                        }
+                        OutputStream outputStream = accept.getOutputStream();
+                        outputStream.write(("HTTP/1.1 200 OK" + DELIMITER).getBytes());
+                        outputStream.write(("Content-Type: text/html" + DELIMITER).getBytes());
+                        outputStream.write(("Content-Length: " + responseBody.length + DELIMITER).getBytes());
+                        outputStream.write(DELIMITER.getBytes());
+                        outputStream.write(responseBody);
+                        outputStream.flush();
+                        System.out.println("CUSTOM SERVER RESPONSE HAS BEEN SEND");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            //read and return a static file
-            try {
-                File file = new File(fileName);
-                byte[] responseBody;
-                if (file.canRead()) {
-                    responseBody = Files.readAllBytes(file.toPath());
-                } else {
-                    responseBody = ("can't read the file by name: " + fileName).getBytes();
-                }
-                OutputStream outputStream = accept.getOutputStream();
-                outputStream.write(("HTTP/1.1 200 OK" + DELIMITER).getBytes());
-                outputStream.write(("Content-Type: text/html" + DELIMITER).getBytes());
-                outputStream.write(("Content-Length: " + responseBody.length + DELIMITER).getBytes());
-                outputStream.write(DELIMITER.getBytes());
-                outputStream.write(responseBody);
-                outputStream.flush();
-                System.out.println("CUSTOM SERVER RESPONSE HAS BEEN SEND");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            //shutdown the server on the "running" flag change
             try {
                 if (serverSocket != null) {
                     serverSocket.close();
