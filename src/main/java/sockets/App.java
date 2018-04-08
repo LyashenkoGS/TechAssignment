@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 public class App {
 
     private static final String DELIMITER = "\r\n";
+    public static boolean isReady = false;
 
     public static void main(String[] args) {
         //process incoming HTTP request in a new thread
@@ -25,6 +26,7 @@ public class App {
             try {
                 serverSocket = new ServerSocket(8080);
                 serverSocket.setReuseAddress(true);
+                isReady = true;
                 accept = serverSocket.accept();
                 System.out.println("START CUSTOM SERVER");
                 bufferedReader = new BufferedReader(new InputStreamReader(accept.getInputStream()));
@@ -71,6 +73,7 @@ public class App {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            isReady = false;
         });
         mainThread.start();
     }
