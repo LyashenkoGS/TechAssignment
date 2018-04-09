@@ -13,14 +13,14 @@ import java.nio.file.Paths;
 public class App {
 
     private static final String DELIMITER = "\r\n";
-
+    private static ServerSocket serverSocket = null;
     private static boolean isReady = false;
-    private static volatile boolean running = true;
+    private static boolean running = true;
 
-
-    public static void stop() throws InterruptedException {
+    public static void stop() throws InterruptedException, IOException {
         App.running = false;
-        while (!isReady) {
+        serverSocket.close();
+        while (isReady) {
             Thread.sleep(100);
             System.out.println("awaiting until the server shutdown");
         }
@@ -31,24 +31,16 @@ public class App {
         Thread mainThread = new Thread(() -> {
             running = true;
             String line;
-            BufferedReader bufferedReader = null;
-            Socket accept = null;
-            String fileName = "";
-            ServerSocket serverSocket = null;
+            Socket connection;
+            String fileName;
             try {
                 serverSocket = new ServerSocket(8080);
                 serverSocket.setReuseAddress(true);
-                isReady = true;
                 System.out.println("START CUSTOM SERVER");
-                accept = serverSocket.accept();
-                System.out.println("Accept incoming request");
-                bufferedReader = new BufferedReader(new InputStreamReader(accept.getInputStream()));
+                isReady = true;
             } catch (IOException e) {
                 e.printStackTrace();
                 try {
-                    if (accept != null) {
-                        accept.close();
-                    }
                     if (serverSocket != null) {
                         serverSocket.close();
                     }
@@ -57,33 +49,35 @@ public class App {
                 }
             }
             while (running) {
-                //parse URI
                 try {
-                    if (bufferedReader.ready()) {
+                    //accept a connection and parse URI
+                    connection = serverSocket.accept();
+                    System.out.println("Accept incoming request");
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    line = bufferedReader.readLine();
+                    String[] tokens = line.split(" ");
+                    fileName = tokens[1].replace("/", "");
+                    while (line != null && !line.equals("")) {
+                        System.out.println(line);
                         line = bufferedReader.readLine();
-                        String[] tokens = line.split(" ");
-                        fileName = tokens[1].replace("/", "");
-                        while (line != null && !line.equals("")) {
-                            System.out.println(line);
-                            line = bufferedReader.readLine();
-                        }
-                        //read and return a static file
-                        File file = new File(fileName);
-                        byte[] responseBody;
-                        if (file.canRead()) {
-                            responseBody = Files.readAllBytes(file.toPath());
-                        } else {
-                            responseBody = ("can't read the file by name: " + fileName).getBytes();
-                        }
-                        OutputStream outputStream = accept.getOutputStream();
-                        outputStream.write(("HTTP/1.1 200 OK" + DELIMITER).getBytes());
-                        outputStream.write(("Content-Type: text/html" + DELIMITER).getBytes());
-                        outputStream.write(("Content-Length: " + responseBody.length + DELIMITER).getBytes());
-                        outputStream.write(DELIMITER.getBytes());
-                        outputStream.write(responseBody);
-                        outputStream.flush();
-                        System.out.println("CUSTOM SERVER RESPONSE HAS BEEN SEND");
                     }
+                    //read and return a static file or an error
+                    File file = new File(fileName);
+                    byte[] responseBody;
+                    if (file.canRead()) {
+                        responseBody = Files.readAllBytes(file.toPath());
+                    } else {
+                        responseBody = ("can't read the file by name: " + fileName).getBytes();
+                    }
+                    OutputStream outputStream = connection.getOutputStream();
+                    outputStream.write(("HTTP/1.1 200 OK" + DELIMITER).getBytes());
+                    outputStream.write(("Content-Type: text/html" + DELIMITER).getBytes());
+                    outputStream.write(("Content-Length: " + responseBody.length + DELIMITER).getBytes());
+                    outputStream.write(DELIMITER.getBytes());
+                    outputStream.write(responseBody);
+                    outputStream.flush();
+                    System.out.println("CUSTOM SERVER RESPONSE HAS BEEN SEND");
+                    connection.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -93,7 +87,6 @@ public class App {
                 if (serverSocket != null) {
                     serverSocket.close();
                 }
-                accept.close();
                 System.out.println("CUSTOM SERVER:SOCKET IS CLOSED");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -105,7 +98,6 @@ public class App {
             System.out.println("awaiting the server start");
             Thread.sleep(500);
         }
-        System.out.println();
     }
 
     static class NanoHTTTPDexample extends NanoHTTPD {
