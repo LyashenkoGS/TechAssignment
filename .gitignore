@@ -1,0 +1,4 @@
+cmake-build-debug
+*.iml
+*_bin
+.idea
