@@ -8,10 +8,12 @@
 ## How to build and run
 
 * to compile
- 'make compile'
+
+ `make compile`
  
 * to run
 
- './tcp_server_bin 8080'
- './tcp_client_bin localhost 8080'
+ `./tcp_server_bin 8080`
+ 
+ `./tcp_client_bin localhost 8080`
   
